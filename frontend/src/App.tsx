@@ -14,6 +14,7 @@ import {
   Network,
   MessageSquare,
   BookOpen,
+  RotateCcw,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -202,6 +203,22 @@ function App() {
     }
   };
 
+  const handleFreshDemo = async () => {
+    const welcome: ChatMessage[] = [
+      {
+        id: Date.now(),
+        role: 'bot',
+        text: 'Hello! I am your **Second Brain**. Upload `.pdf`, `.md`, or `.txt` documents in the sidebar, explore the **3D Knowledge Graph**, or ask me anything with sub-150ms semantic vector retrieval.',
+      },
+    ];
+    setMessages(welcome);
+    setActiveSourceKeys([]);
+    setLastLatency(null);
+    setActiveTab('split');
+    localStorage.setItem('sb_messages', JSON.stringify(welcome));
+    await fetchBackendState();
+  };
+
   return (
     <div className="flex flex-col h-screen max-h-screen relative overflow-hidden bg-brain-900 font-sans">
       {/* Background blobs */}
@@ -266,6 +283,17 @@ function App() {
               {lastLatency} ms retrieval
             </div>
           )}
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleFreshDemo}
+            title="Reset chat and refresh 3D Knowledge Graph for a clean live demo"
+            className="flex items-center gap-2 bg-purple-500/20 border border-purple-400/40 text-purple-200 px-3.5 py-2 rounded-xl hover:bg-purple-500/30 transition-colors text-sm font-medium cursor-pointer"
+          >
+            <RotateCcw size={16} />
+            Fresh Demo
+          </motion.button>
 
           <a
             href="https://github.com/Arnav-102/SecondBrain-RAG"
