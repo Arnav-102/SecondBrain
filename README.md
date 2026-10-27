@@ -1,6 +1,6 @@
 # Second Brain — Offline RAG & 3D Knowledge Graph 🧠
 
-[![Launch 24/7 Live Web App](https://img.shields.io/badge/%F0%9F%9A%80_Launch_Live_Web_App-arnav--102.github.io%2FSecondBrain--RAG-8a2be2?style=for-the-badge)](https://arnav-102.github.io/SecondBrain-RAG/)
+[![Launch 24/7 Live Web App](https://img.shields.io/badge/%F0%9F%9A%80_Launch_Live_Web_App-arnav--102.github.io%2FSecondBrain-8a2be2?style=for-the-badge)](https://arnav-102.github.io/SecondBrain/)
 [![Open Local Dev UI](https://img.shields.io/badge/%F0%9F%92%BB_Local_Dev_UI-localhost%3A5173-4169e1?style=for-the-badge)](http://localhost:5173/)
 [![FastAPI Swagger Docs](https://img.shields.io/badge/%E2%9A%A1_FastAPI_Swagger-127.0.0.1%3A8000%2Fdocs-10b981?style=for-the-badge)](http://127.0.0.1:8000/docs)
 
@@ -10,7 +10,7 @@ A full-stack **Retrieval-Augmented Generation (RAG)** knowledge assistant with a
 
 ## 🌐 Instant Live Demo (Zero Setup Required)
 
-Click **[🚀 Launch Live Web App (`https://arnav-102.github.io/SecondBrain-RAG/`)](https://arnav-102.github.io/SecondBrain-RAG/)** above to run the interactive 3D Knowledge Graph and RAG Assistant directly in your browser 24/7—even when your local server is turned off!
+Click **[🚀 Launch Live Web App (`https://arnav-102.github.io/SecondBrain/`)](https://arnav-102.github.io/SecondBrain/)** above to run the interactive 3D Knowledge Graph and RAG Assistant directly in your browser 24/7—even when your local server is turned off!
 
 - **If your local FastAPI backend (`127.0.0.1:8000`) is running:** It connects to your local **ChromaDB + Groq LLM** pipeline.
 - **If opened from GitHub Pages on any laptop/phone (serverless):** It automatically uses its built-in **Browser-Native Vector Search & Pre-Indexed Portfolio Knowledge Base**, so you can orbit the 3D graph, run the **5,000-Node LOD Stress Test at 60 FPS**, upload files, and query the RAG chat anywhere!

@@ -513,7 +513,7 @@ function App() {
           </motion.button>
 
           <a
-            href="https://github.com/Arnav-102/SecondBrain-RAG"
+            href="https://github.com/Arnav-102/SecondBrain"
             target="_blank"
             rel="noreferrer"
             className="no-underline"
