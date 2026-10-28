@@ -19,7 +19,7 @@ if os.name == "nt" and os.path.exists("D:\\"):
     os.environ["HOME"] = f"{_cache_root}\\userprofile"
 
 import PyPDF2
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import chromadb
@@ -38,14 +38,28 @@ if os.path.exists(env_path):
 
 app = FastAPI(title="Second Brain RAG API")
 
-# Configure CORS
+# Configure CORS + Chrome Private Network Access (allows https://arnav-102.github.io to call http://127.0.0.1:8000)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def add_private_network_access_header(request: Request, call_next):
+    if request.method == "OPTIONS" and request.headers.get("access-control-request-private-network") == "true":
+        resp = Response(status_code=204)
+        resp.headers["Access-Control-Allow-Origin"] = "*"
+        resp.headers["Access-Control-Allow-Methods"] = "*"
+        resp.headers["Access-Control-Allow-Headers"] = "*"
+        resp.headers["Access-Control-Allow-Private-Network"] = "true"
+        return resp
+    response = await call_next(request)
+    response.headers["Access-Control-Allow-Private-Network"] = "true"
+    return response
 
 # Initialize ChromaDB (Persistent local storage)
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
@@ -108,6 +122,16 @@ def health_check():
         "message": "Second Brain RAG API is running.",
         "documents_indexed": collection.count(),
     }
+
+
+@app.get("/sync-key")
+def sync_local_groq_key(request: Request):
+    """Allow local browser on 127.0.0.1 to cache GROQ_API_KEY in localStorage for serverless GitHub Pages demos."""
+    client_host = request.client.host if request.client else ""
+    if client_host not in ("127.0.0.1", "::1", "localhost"):
+        raise HTTPException(status_code=403, detail="Loopback access only")
+    groq_client = get_groq_client()
+    return {"groq_api_key": groq_client.api_key or ""}
 
 
 @app.get("/documents")

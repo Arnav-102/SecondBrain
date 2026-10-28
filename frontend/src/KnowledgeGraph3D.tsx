@@ -10,6 +10,7 @@ export interface GraphNode {
   source: string;
   chunk_index?: number;
   preview: string;
+  fullText?: string;
   x: number;
   y: number;
   z: number;
