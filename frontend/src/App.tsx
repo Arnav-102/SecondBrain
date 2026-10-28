@@ -215,6 +215,7 @@ function App() {
   });
   const [activeSourceKeys, setActiveSourceKeys] = useState<string[]>([]);
   const [lastLatency, setLastLatency] = useState<number | null>(18.4);
+  const [backendOnline, setBackendOnline] = useState<boolean>(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
@@ -233,12 +234,14 @@ function App() {
         fetch(`${apiUrl}/graph`),
       ]);
       if (docsRes.ok) {
+        setBackendOnline(true);
         const docsJson = await docsRes.json();
         if (Array.isArray(docsJson.documents) && docsJson.documents.length > 0) {
           setFiles(docsJson.documents);
         }
       }
       if (graphRes.ok) {
+        setBackendOnline(true);
         const graphJson = await graphRes.json();
         if (Array.isArray(graphJson.nodes) && graphJson.nodes.length > 0) {
           setGraphData({
@@ -248,7 +251,7 @@ function App() {
         }
       }
     } catch {
-      // Running in standalone cloud/browser mode; keep pre-indexed knowledge base active
+      setBackendOnline(false);
     }
   }, [apiUrl]);
 
@@ -494,11 +497,24 @@ function App() {
         </div>
 
         <div className="flex items-center gap-3">
-          {lastLatency !== null && (
-            <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1.5 rounded-xl text-xs font-mono">
-              <Zap size={14} className="text-emerald-400" />
-              {lastLatency} ms retrieval
+          {backendOnline ? (
+            <div className="flex items-center gap-1.5 bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 px-3 py-1.5 rounded-xl text-xs font-medium">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              FastAPI + Groq Live ({lastLatency ?? 18}ms)
             </div>
+          ) : (
+            <a
+              href="secondbrain://launch"
+              onClick={() => {
+                setTimeout(() => fetchBackendState(), 4000);
+                setTimeout(() => fetchBackendState(), 7000);
+              }}
+              className="flex items-center gap-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-200 px-3 py-1.5 rounded-xl text-xs font-semibold no-underline transition-colors cursor-pointer"
+              title="Click to launch your local FastAPI + ChromaDB + Groq backend server automatically"
+            >
+              <Zap size={14} className="text-amber-300" />
+              Start Local Backend + API
+            </a>
           )}
 
           <motion.button
